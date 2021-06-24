@@ -110,6 +110,36 @@ namespace Automated_Test
             Assert.IsNotNull(driver.FindElement(By.XPath("//*[@id='page-top']/div[2]/table/tbody/tr[25]")));
         }
 
+        //Terceira parte
+
+        //Funcionalidade: login de usu�rio
+        //Cenário: Valida um usuário logado
+        //Dado que um usuário possua uma conta no sistema
+        //E tente acessar a página de login após a inserçãoo de suas credenciais
+        //Quando ele aciona a opção de realizar login
+        //Então ele deve ser redirecionado para a página inicial logado
+
+        [TestMethod]
+        public void LoginTest()
+        {
+            string username = "LuizMarqs";
+            string password = "Marques98";
+
+            driver.FindElement(By.XPath("//a[@href='https://opentdb.com/login.php']")).Click();
+            driver.FindElement(By.Id("username")).Clear();
+            driver.FindElement(By.Id("username")).SendKeys(username);
+            driver.FindElement(By.Id("password")).Clear();
+            driver.FindElement(By.Id("password")).SendKeys(password);
+            driver.FindElement(By.Id("page-top")).Click();
+            driver.FindElement(By.XPath("//button[@type='submit']")).Click();
+            driver.FindElement(By.XPath("//body[@id='page-top']/section/div/div")).Click();
+
+            IWebElement loginText = driver.FindElement(By.XPath("//li[@class='menu-item dropdown']/a[@class='dropdown-toggle']"));
+           
+
+            Assert.AreEqual(username.ToUpper(), loginText.Text);
+        }
+
 
         private bool IsElementPresent(By by)
         {
