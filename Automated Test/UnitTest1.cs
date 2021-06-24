@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Text;
 
@@ -65,6 +67,8 @@ namespace Automated_Test
         [TestMethod]
         public void NoQuestionsFoundTest()
         {
+            string validationMessage = "No questions found.";
+           
             driver.Navigate().GoToUrl("https://opentdb.com/");
             driver.FindElement(By.LinkText("BROWSE")).Click();
             driver.FindElement(By.XPath("//body[@id='page-top']/div[2]")).Click();
@@ -73,14 +77,38 @@ namespace Automated_Test
             driver.FindElement(By.Id("query")).SendKeys("Science: Computers");
             driver.FindElement(By.XPath("//body[@id='page-top']/div/form/div/button")).Click();
 
-            ITakesScreenshot camera = driver as ITakesScreenshot;
-            Screenshot screenshot = camera.GetScreenshot();
-            string cas = DateTime.Now.ToString("dd_MM_yy_HH_mm_ss");
-
-            screenshot.SaveAsFile("C:/Projetos/Una/Evidence/" + cas + ".png");
+            IWebElement returnMessage = driver.FindElement(By.XPath("//div[@class='alert alert-danger']"));
+   
+            Assert.AreEqual(validationMessage, returnMessage.Text);
 
         }
 
+
+        //Segunda parte
+
+        //Funcionalidade: Busca no Banco de Quest�es
+        //Cenário: Busca por questão inexistente
+        //Dado que navego para a página de busca do banco de quest�es
+        //E digito 'Science: Computers' no campo de busca e seleciono Category
+        //Quando clico no botão de buscar
+        //Então visualizo a listagem de quest�es com 25 itens e o controle de paginação.'
+
+        [TestMethod]
+        public void Validar25()
+        {
+            driver.FindElement(By.LinkText("BROWSE")).Click();
+            driver.FindElement(By.XPath("//body[@id='page-top']/div[2]")).Click();
+            driver.FindElement(By.Id("query")).Click();
+            driver.FindElement(By.Id("query")).Clear();
+            driver.FindElement(By.Id("query")).SendKeys("Science: Computers");
+            driver.FindElement(By.XPath("//body[@id='page-top']/div/form/div/button")).Click();
+            driver.FindElement(By.Id("type")).Click();
+            new SelectElement(driver.FindElement(By.Id("type"))).SelectByText("Category");
+            driver.FindElement(By.Id("type")).Click();
+            driver.FindElement(By.XPath("//body[@id='page-top']/div/form/div/button")).Click();
+
+            Assert.IsNotNull(driver.FindElement(By.XPath("//*[@id='page-top']/div[2]/table/tbody/tr[25]")));
+        }
 
 
         private bool IsElementPresent(By by)
