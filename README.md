@@ -1,4 +1,4 @@
-# Teste de Automação para QA - CI&T
+# Teste de Automação para QA - CI&T/Una
 
 ### Integrantes 🧑🏽‍💻
 
